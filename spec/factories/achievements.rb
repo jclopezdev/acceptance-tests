@@ -5,6 +5,8 @@ FactoryBot.define do
     featured { false }
     cover_image { 'some_file.png' }
 
+    user
+
     factory :public_achievement do
       privacy :public_access
     end

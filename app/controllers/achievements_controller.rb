@@ -1,20 +1,21 @@
 class AchievementsController < ApplicationController
-  before_action :set_achievement, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
+  before_action :set_achievement, only: %i[show edit update destroy owners_only]
+  before_action :owners_only, only: %i[edit update destroy]
 
   def index
     @achievements = Achievement.public_access
   end
 
   def show
-    @description = Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(@achievement.description)
   end
 
   def new
-    @achievement = Achievement.new
+    @achievement = current_user.achievements.new
   end
 
   def create
-    @achievement = Achievement.new(achievement_params)
+    @achievement = current_user.achievements.new(achievement_params)
     if @achievement.save
       redirect_to achievement_url(@achievement), notice: 'Achievement has been created'
     else
@@ -42,8 +43,14 @@ class AchievementsController < ApplicationController
   private
 
   def set_achievement
-		@achievement = Achievement.find(params[:id])
-	end
+    @achievement = Achievement.find(params[:id])
+  end
+
+  def owners_only
+    if current_user != @achievement.user
+      redirect_to achievements_path
+    end
+  end
 
   def achievement_params
     params.require(:achievement).permit(:title, :description, :privacy, :cover_image, :featured)
