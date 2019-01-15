@@ -3,6 +3,8 @@ class Achievement < ApplicationRecord
 
   enum privacy: %i[public_access private_access friend_access]
 
+  mount_uploader :cover_image, CoverImageUploader
+
   validates :title, presence: true
   validates :user, presence: true
   validates :title, uniqueness: {
