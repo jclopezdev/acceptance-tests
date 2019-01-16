@@ -49,6 +49,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
   gem 'spring-commands-cucumber'
+  gem 'dotenv-rails'
 end
 
 group :development do
@@ -65,6 +66,8 @@ group :test do
   gem 'database_cleaner'
   gem 'rails-controller-testing'
   gem 'shoulda-matchers', require: false
+  gem 'vcr'
+  gem 'webmock'
 end
 
 
